@@ -1,0 +1,22 @@
+{
+  "name": "discord-voice-channel-bot",
+  "version": "1.0.0",
+  "description": "simple discord bot that log voice channel events",
+  "main": "discord-voice-channel-bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xdavidwu/discord-voice-channel-bot.git"
+  },
+  "author": "xdavidwu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xdavidwu/discord-voice-channel-bot/issues"
+  },
+  "homepage": "https://github.com/xdavidwu/discord-voice-channel-bot#readme",
+  "dependencies": {
+    "discord.js": "github:discordjs/discord.js"
+  }
+}
