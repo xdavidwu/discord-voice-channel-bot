@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonAnnotations:
+  app.gitlab.com/app: ${CI_PROJECT_PATH_SLUG}
+  app.gitlab.com/env: ${CI_ENVIRONMENT_SLUG}
+commonLabels:
+  app: ${CI_PROJECT_NAME}
+images:
+  - name: registry.eglo.ga/none
+    newName: ${CI_REGISTRY_IMAGE}
+    newTag: "${CI_PIPELINE_ID}"
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+  - name: secrets
+    files:
+      - token=${TOKEN}
+resources:
+  - deployment.yml

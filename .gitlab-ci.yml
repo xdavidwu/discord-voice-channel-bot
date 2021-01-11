@@ -5,7 +5,7 @@ stages:
 
 build:
   stage: build
-  image: alpine:edge
+  image: alpine:latest
   before_script:
     - apk add npm git tar
     - npm ci
@@ -16,28 +16,8 @@ build:
     paths:
       - app.tar
 
-package:
-  stage: package
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:production
-  only:
-    - master
-
-deploy:
-  stage: deploy
-  image:
-    name: alpine:latest
-  environment:
-    name: production
-  before_script:
-    - apk add gettext
-    - wget https://storage.googleapis.com/kubernetes-release/release/v1.17.9/bin/linux/amd64/kubectl
-    - chmod +x kubectl
-  script:
-    - ./kubectl -n $KUBE_NAMESPACE create secret generic ${CI_PROJECT_PATH_SLUG}-secrets --from-file=token=$TOKEN --dry-run -o yaml | ./kubectl -n $KUBE_NAMESPACE apply -f -
-    - envsubst < deployment.yml > out.yml
-    - ./kubectl -n $KUBE_NAMESPACE apply -f out.yml
+include:
+  - project: ci-modulize/kubernetes
+    file:
+      - package.yml
+      - deploy.yml
